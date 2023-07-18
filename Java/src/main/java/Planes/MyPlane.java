@@ -1,9 +1,9 @@
 package Planes;
 
-public class MyPlane  extends Plane {
-    public MyPlane(String model, int maxSpeed, int maxFlightDistance, int maxLoadCapacity) {
-        super(model, maxSpeed, maxFlightDistance, maxLoadCapacity);
+//TODO implement it later
+public class MyPlane extends Plane {
+    public MyPlane(String model, int speed, int flightDistance, int loadCapacity) {
+        super(model, speed, flightDistance, loadCapacity);
     }
 
-    //TODO implement it later
 }

@@ -2,48 +2,35 @@ package Planes;
 
 import java.util.Objects;
 
-public class PassengerPlane extends Plane{
+public class PassengerPlane extends Plane {
 
-    //=================FIELDS=================
-    private int passengersCapacity;
+    private int passengerCapacity;
 
-    //=================CONSTRUCTORS=================
-    public PassengerPlane(String model, int maxSpeed, int maxFlightDistance, int maxLoadCapacity, int passengersCapacity) {
-        super(model, maxSpeed, maxFlightDistance, maxLoadCapacity);
-        this.passengersCapacity = passengersCapacity;
+    public PassengerPlane(String model, int speed, int flightDistance, int loadCapacity, int passengerCapacity) {
+        super(model, speed, flightDistance, loadCapacity);
+        this.passengerCapacity = passengerCapacity;
     }
 
-
-    //=================METHODS=================
-    public int getPassengersCapacity() {
-        return passengersCapacity;
+    public int getPassengerCapacity() {
+        return passengerCapacity;
     }
 
     @Override
     public String toString() {
-        return super.toString().replace("}",
-                ", passengersCapacity=" + passengersCapacity +
-                '}');
+        return "\nPassenger plane " + super.toString().replace("}",
+                ", passenger capacity=" + passengerCapacity +
+                        "}");
     }
-
-//    @Override
-//    public String toString() {
-//        return super.toString().replace("}",
-//                ", passengersCapacity=" + passengersCapacity +
-//                        '}');
-//    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PassengerPlane)) return false;
         if (!super.equals(o)) return false;
-        PassengerPlane plane = (PassengerPlane) o;
-        return passengersCapacity == plane.passengersCapacity;
+        PassengerPlane otherPlane = (PassengerPlane) o;
+        return passengerCapacity == otherPlane.passengerCapacity;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), passengersCapacity);
+        return Objects.hash(super.hashCode(), passengerCapacity);
     }
 }
