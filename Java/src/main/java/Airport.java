@@ -1,11 +1,11 @@
 import Planes.MilitaryPlane;
 import Planes.PassengerPlane;
 import Planes.Plane;
-import models.MilitaryTypes;
-
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import models.MilitaryTypes;
 
 public class Airport {
     private List<? extends Plane> planes;
@@ -19,47 +19,31 @@ public class Airport {
     }
 
     public <T extends Plane> List<T> getPlanesByType(Class<T> planeClass) {
-        List<T> result = new ArrayList<>();
-        for (Plane p : planes) {
-            if (planeClass.isInstance(p)) {
-                result.add(planeClass.cast(p));
-            }
-        }
-        return result;
+        return planes.stream()
+                     .filter(planeClass::isInstance)
+                     .map(planeClass::cast)
+                     .collect(Collectors.toList());
     }
 
     public PassengerPlane findPlaneWithMaxPassengerCapacity() {
-        List<PassengerPlane> passengerPlanes = getPlanesByType(PassengerPlane.class);
-        PassengerPlane planeWithMaxCapacity = null;
-        try {
-            planeWithMaxCapacity = passengerPlanes.get(0);
-            for (PassengerPlane plane : passengerPlanes) {
-                if (plane.getPassengerCapacity() > planeWithMaxCapacity.getPassengerCapacity()) {
-                    planeWithMaxCapacity = plane;
-                }
-            }
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("\nCould not find a plane with max passenger capacity because the set of passenger planes is empty.");
-        }
-        return planeWithMaxCapacity;
+        return getPlanesByType(PassengerPlane.class)
+            .stream()
+            .max(Comparator.comparingInt(PassengerPlane::getPassengerCapacity))
+            .orElseThrow(() -> new NoSuchElementException(
+                "\nCould not find a plane with max passenger capacity because the set of passenger planes is empty."));
     }
 
     public List<MilitaryPlane> getMilitaryPlanesByType(MilitaryTypes type) {
-        List<MilitaryPlane> transportMilitaryPlanes = new ArrayList<>();
-        List<MilitaryPlane> militaryPlanes = getPlanesByType(MilitaryPlane.class);
-        for (MilitaryPlane plane : militaryPlanes) {
-            if (plane.getMilitaryType() == type) {
-                transportMilitaryPlanes.add(plane);
-            }
-        }
-        return transportMilitaryPlanes;
+        return getPlanesByType(MilitaryPlane.class)
+            .stream()
+            .filter(plane -> plane.getMilitaryType() == type)
+            .collect(Collectors.toList());
     }
 
     public Airport sortByFlightDistance() {
         planes.sort(Comparator.comparing(Plane::getFlightDistance));
         return this;
     }
-
 
     public Airport sortBySpeed() {
         planes.sort(Comparator.comparing(Plane::getSpeed));
@@ -74,8 +58,7 @@ public class Airport {
     @Override
     public String toString() {
         return "Airport{" +
-                "Planes=" + planes.toString() +
-                '}';
+            "Planes=" + planes.toString() +
+            '}';
     }
-
 }
